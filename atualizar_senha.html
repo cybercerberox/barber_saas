@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Definir Nova Senha - Barber SaaS</title>
+    
+    <!-- Google Fonts: Oswald & Poppins -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- CSS Dark / Vintage -->
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Supabase SDK e Configuração -->
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <script src="supabase-config.js"></script>
+</head>
+<body>
+
+    <div class="auth-wrapper">
+        <div class="auth-card">
+            
+            <div class="auth-header">
+                <a href="index.html" class="logo">
+                    <i class="fas fa-scissors"></i> BARBER SAAS
+                </a>
+                <p>Segurança da Conta</p>
+            </div>
+
+            <div class="booking-form-container">
+                <div style="text-align: center; margin-bottom: 22px;">
+                    <h2 style="font-family: var(--font-heading); font-size: 1.8rem; letter-spacing: 1px;">DEFINIR NOVA SENHA</h2>
+                    <p style="font-size: 0.88rem; color: var(--text-muted);">Crie uma senha forte e segura para acessar seu painel.</p>
+                </div>
+
+                <div id="updateAlert" style="display: none;"></div>
+
+                <form id="updatePasswordForm" class="booking-form" onsubmit="atualizarSenha(event)">
+                    <div class="form-group">
+                        <label for="novaSenha"><i class="fas fa-lock"></i> Nova Senha</label>
+                        <input type="password" id="novaSenha" required minlength="6" placeholder="Mínimo 6 caracteres" autocomplete="new-password">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="confirmaSenha"><i class="fas fa-shield-alt"></i> Confirmar Nova Senha</label>
+                        <input type="password" id="confirmaSenha" required minlength="6" placeholder="Repita a nova senha" autocomplete="new-password">
+                    </div>
+
+                    <button type="submit" id="btnUpdateSubmit" class="btn btn-primary btn-block">
+                        <i class="fas fa-save"></i> Salvar Nova Senha
+                    </button>
+                </form>
+
+                <div class="auth-footer-links">
+                    <a href="login.html" class="auth-link">
+                        <i class="fas fa-sign-in-alt"></i> Ir para a tela de Login
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        // Monitora o evento de recuperação de senha disparado pelo hash da URL
+        document.addEventListener('DOMContentLoaded', () => {
+            if (supabaseClient) {
+                supabaseClient.auth.onAuthStateChange(async (event, session) => {
+                    if (event === 'PASSWORD_RECOVERY') {
+                        mostrarAlerta('Sessão de recuperação validada. Digite sua nova senha abaixo.', 'info');
+                    }
+                });
+            }
+        });
+
+        async function atualizarSenha(e) {
+            e.preventDefault();
+
+            const alertBox = document.getElementById('updateAlert');
+            alertBox.style.display = 'none';
+
+            const novaSenha = document.getElementById('novaSenha').value;
+            const confirmaSenha = document.getElementById('confirmaSenha').value;
+            const btnSubmit = document.getElementById('btnUpdateSubmit');
+
+            if (novaSenha.length < 6) {
+                mostrarAlerta('A senha deve ter no mínimo 6 caracteres.', 'warning');
+                return;
+            }
+
+            if (novaSenha !== confirmaSenha) {
+                mostrarAlerta('As senhas digitadas não coincidem. Verifique e tente novamente.', 'danger');
+                return;
+            }
+
+            const textoOriginal = btnSubmit.innerHTML;
+            btnSubmit.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Atualizando senha...';
+            btnSubmit.disabled = true;
+
+            try {
+                if (!supabaseClient) {
+                    throw new Error('Supabase não inicializado.');
+                }
+
+                const { data, error } = await supabaseClient.auth.updateUser({
+                    password: novaSenha
+                });
+
+                if (error) throw error;
+
+                mostrarAlerta('Senha alterada com sucesso! Redirecionando para o painel...', 'success');
+
+                setTimeout(() => {
+                    window.location.href = 'painel.html';
+                }, 1500);
+
+            } catch (err) {
+                console.error('Erro ao atualizar senha:', err);
+                mostrarAlerta(err.message || 'Falha ao atualizar senha. O link de recuperação pode ter expirado.', 'danger');
+                btnSubmit.innerHTML = textoOriginal;
+                btnSubmit.disabled = false;
+            }
+        }
+
+        function mostrarAlerta(msg, tipo) {
+            const alertBox = document.getElementById('updateAlert');
+            alertBox.className = `alert alert-${tipo}`;
+            alertBox.innerHTML = `<i class="fas fa-info-circle"></i> <span>${msg}</span>`;
+            alertBox.style.display = 'flex';
+        }
+    </script>
+
+</body>
+</html>

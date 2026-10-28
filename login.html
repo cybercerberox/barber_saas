@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Acesso Administrativo - Barber SaaS</title>
+    
+    <!-- Google Fonts: Oswald & Poppins -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- CSS Dark / Vintage -->
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Supabase SDK e Configuração -->
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <script src="supabase-config.js"></script>
+    <script src="login.js" defer></script>
+</head>
+<body>
+
+    <div class="auth-wrapper">
+        <div class="auth-card">
+            
+            <div class="auth-header">
+                <a href="index.html" class="logo">
+                    <i class="fas fa-scissors"></i> BARBER SAAS
+                </a>
+                <p>Gestão e Agendamentos para Barbearias</p>
+            </div>
+
+            <div class="booking-form-container">
+                <div style="text-align: center; margin-bottom: 22px;">
+                    <h2 style="font-family: var(--font-heading); font-size: 1.8rem; letter-spacing: 1px;">ACESSO AO PAINEL</h2>
+                    <p style="font-size: 0.88rem; color: var(--text-muted);">Entre com suas credenciais de barbeiro</p>
+                </div>
+
+                <!-- Alerta DOM para mensagens e erros amigáveis -->
+                <div id="loginAlert" style="display: none;"></div>
+
+                <form id="loginForm" class="booking-form">
+                    <div class="form-group">
+                        <label for="email"><i class="far fa-envelope"></i> E-mail Cadastrado</label>
+                        <input type="email" id="email" required placeholder="seu@email.com" autocomplete="email">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="senha"><i class="fas fa-lock"></i> Senha</label>
+                        <input type="password" id="senha" required placeholder="••••••••" autocomplete="current-password">
+                    </div>
+
+                    <div style="display: flex; justify-content: flex-end; margin-bottom: 18px;">
+                        <a href="esqueceu_senha.html" class="auth-link" style="font-size: 0.85rem;">Esqueceu a senha?</a>
+                    </div>
+
+                    <button type="submit" id="btnLoginSubmit" class="btn btn-primary btn-block">
+                        <i class="fas fa-sign-in-alt"></i> Entrar no Sistema
+                    </button>
+                </form>
+
+                <div class="auth-footer-links">
+                    <p style="color: var(--text-muted);">Ainda não tem conta no sistema?</p>
+                    <a href="cadastro_barbearia.html" class="auth-link highlight">
+                        <i class="fas fa-plus-circle"></i> Cadastrar Minha Barbearia
+                    </a>
+                    <a href="index.html" class="auth-link" style="margin-top: 10px;">
+                        <i class="fas fa-arrow-left"></i> Voltar à página inicial
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</body>
+</html>

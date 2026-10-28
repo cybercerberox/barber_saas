@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro da Barbearia - Onboarding Barber SaaS</title>
+    
+    <!-- Google Fonts: Oswald & Poppins -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- CSS Dark / Vintage -->
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Supabase SDK e Configuração -->
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <script src="supabase-config.js"></script>
+    <script src="cadastro.js" defer></script>
+</head>
+<body>
+
+    <div class="auth-wrapper">
+        <div class="auth-card" style="max-width: 520px;">
+            
+            <div class="auth-header">
+                <a href="index.html" class="logo">
+                    <i class="fas fa-scissors"></i> BARBER SAAS
+                </a>
+                <p>Onboarding Oficial • Configure sua Barbearia</p>
+            </div>
+
+            <div class="booking-form-container">
+                <div style="text-align: center; margin-bottom: 22px;">
+                    <div style="display: inline-block; background-color: rgba(16, 185, 129, 0.15); color: #34D399; border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 50px; font-size: 0.8rem; font-weight: 700; padding: 4px 14px; margin-bottom: 12px;">
+                        <i class="fas fa-check-circle"></i> PAGAMENTO CONFIRMADO
+                    </div>
+                    <h2 style="font-family: var(--font-heading); font-size: 1.8rem; letter-spacing: 1px;">CADASTRE SEU SALÃO</h2>
+                    <p style="font-size: 0.88rem; color: var(--text-muted);">Configure seu acesso e o endereço exclusivo da sua página de agendamento online.</p>
+                </div>
+
+                <!-- Alerta DOM de mensagens/erros -->
+                <div id="cadastroAlert" style="display: none;"></div>
+
+                <form id="cadastroForm" class="booking-form">
+                    <div class="form-group">
+                        <label for="nomeSalao"><i class="fas fa-store"></i> Nome da Barbearia / Salão</label>
+                        <input type="text" id="nomeSalao" required placeholder="Ex: Barbearia Dom Pedro" autocomplete="organization">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="slug"><i class="fas fa-link"></i> Identificador da URL (Slug)</label>
+                        <input type="text" id="slug" required placeholder="ex: dom-pedro" pattern="^[a-z0-9-]+$" title="Use apenas letras minúsculas, números e hífens.">
+                        <div class="slug-preview-box">
+                            URL do seu salão: <span id="slugPreview">index.html?salao=<strong>seu-salao</strong></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email"><i class="far fa-envelope"></i> E-mail de Acesso</label>
+                        <input type="email" id="email" required placeholder="barbeiro@email.com" autocomplete="email">
+                        <span class="form-helper">Este será o seu login de administrador.</span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="senha"><i class="fas fa-lock"></i> Senha de Acesso</label>
+                        <input type="password" id="senha" required minlength="6" placeholder="Mínimo 6 caracteres" autocomplete="new-password">
+                    </div>
+
+                    <button type="submit" id="btnCadastroSubmit" class="btn btn-primary btn-block">
+                        <i class="fas fa-rocket"></i> Concluir Cadastro e Acessar Painel
+                    </button>
+                </form>
+
+                <div class="auth-footer-links">
+                    <p style="color: var(--text-muted);">Já possui uma barbearia cadastrada?</p>
+                    <a href="login.html" class="auth-link highlight">
+                        <i class="fas fa-sign-in-alt"></i> Fazer Login no Painel
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Barber SaaS - O Sistema Definitivo para sua Barbearia</title>
+    
+    <!-- Google Fonts: Oswald & Poppins -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- CSS Dark / Vintage -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- TOPBAR -->
+    <div class="top-bar">
+        <div class="container top-bar-content">
+            <div class="top-info">
+                <span><i class="fas fa-rocket"></i> Plataforma Oficial Micro-SaaS para Barbeiros e Salões</span>
+            </div>
+            <div>
+                <a href="login.html" style="color: var(--accent-gold); text-decoration: none; font-weight: 600;">
+                    <i class="fas fa-sign-in-alt"></i> Já sou cliente (Entrar no Painel)
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- CABEÇALHO COMERCIAL -->
+    <header class="header">
+        <div class="container navbar">
+            <a href="landing_comercial.html" class="logo">
+                <i class="fas fa-scissors"></i> BARBER SAAS
+            </a>
+
+            <nav class="nav-menu">
+                <ul>
+                    <li><a href="#beneficios" class="nav-link">Benefícios</a></li>
+                    <li><a href="#como-funciona" class="nav-link">Como Funciona</a></li>
+                    <li><a href="#planos" class="nav-link">Preços & Planos</a></li>
+                    <li><a href="login.html" class="btn btn-outline btn-sm">Acessar Painel</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- HERO COMERCIAL -->
+    <section class="hero">
+        <div class="container hero-content">
+            <span class="sub-title">POTENCIALIZE SUA BARBEARIA</span>
+            <h1>SUA BARBEARIA RECEBENDO AGENDAMENTOS 24 HORAS POR DIA</h1>
+            <p>Tenha seu próprio link personalizado, catálogo exclusivo de serviços, reduza faltas e gerencie tudo em um painel escuro e elegante.</p>
+            <div class="hero-btns">
+                <a href="#planos" class="btn btn-primary"><i class="fas fa-bolt"></i> Começar Agora por R$ 59,90/mês</a>
+                <a href="login.html" class="btn btn-outline">Já tenho conta</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- SEÇÃO COMO FUNCIONA (O FLUXO) -->
+    <section id="como-funciona" class="section">
+        <div class="container">
+            <div class="section-title">
+                <h2>COMO FUNCIONA O FLUXO DO SAAS</h2>
+                <p>Veja como é simples e rápido colocar seu salão no ar</p>
+            </div>
+
+            <div class="services-grid" style="grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));">
+                <div class="service-card">
+                    <div class="service-icon"><i class="fas fa-credit-card"></i></div>
+                    <h3>1. Escolha o Plano</h3>
+                    <p>Contrate a assinatura no checkout seguro com Pix ou Cartão de Crédito.</p>
+                </div>
+
+                <div class="service-card">
+                    <div class="service-icon"><i class="fas fa-store"></i></div>
+                    <h3>2. Crie seu Salão</h3>
+                    <p>Defina o nome da sua barbearia e escolha seu identificador exclusivo de URL (Slug).</p>
+                </div>
+
+                <div class="service-card">
+                    <div class="service-icon"><i class="fas fa-sliders-h"></i></div>
+                    <h3>3. Edite seus Serviços</h3>
+                    <p>No painel, cadastre seus cortes, barboterapia, combos e defina seus próprios preços.</p>
+                </div>
+
+                <div class="service-card">
+                    <div class="service-icon"><i class="fas fa-share-alt"></i></div>
+                    <h3>4. Divulgue seu Link</h3>
+                    <p>Coloque o link na bio do Instagram ou WhatsApp e receba reservas no piloto automático.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SEÇÃO DE PLANOS / GATEWAY SIMULADO -->
+    <section id="planos" class="section booking-section">
+        <div class="container">
+            <div class="section-title">
+                <h2>PLANO COMPLETO PARA SUA BARBEARIA</h2>
+                <p>Tudo o que você precisa em uma assinatura acessível e sem taxas por agendamento</p>
+            </div>
+
+            <div style="max-width: 460px; margin: 0 auto;">
+                <div class="service-card highlight" style="padding: 40px 30px;">
+                    <div class="badge-pop">ACESSO IMEDIATO</div>
+                    <div class="service-icon"><i class="fas fa-crown"></i></div>
+                    <h3 style="font-size: 1.8rem;">Plano Barbeiro Pro</h3>
+                    <p>Tenha seu sistema completo com link próprio e catálogo personalizado.</p>
+                    
+                    <div class="service-price" style="font-size: 2.8rem; margin: 15px 0;">
+                        R$ 59,90 <span style="font-size: 1rem; color: var(--text-muted); font-weight: 400;">/ mês</span>
+                    </div>
+
+                    <div style="text-align: left; width: 100%; margin: 20px 0; font-size: 0.92rem; color: var(--text-muted); display: flex; flex-direction: column; gap: 10px;">
+                        <div><i class="fas fa-check" style="color: var(--accent-gold); margin-right: 8px;"></i> Link de agendamento próprio (ex: /?salao=seunome)</div>
+                        <div><i class="fas fa-check" style="color: var(--accent-gold); margin-right: 8px;"></i> Catálogo 100% editável de serviços e preços</div>
+                        <div><i class="fas fa-check" style="color: var(--accent-gold); margin-right: 8px;"></i> Painel administrativo com controle de status</div>
+                        <div><i class="fas fa-check" style="color: var(--accent-gold); margin-right: 8px;"></i> Botão direto de WhatsApp dos clientes</div>
+                        <div><i class="fas fa-check" style="color: var(--accent-gold); margin-right: 8px;"></i> Sem limite de clientes ou agendamentos</div>
+                    </div>
+
+                    <button onclick="abrirModalCheckout()" class="btn btn-primary btn-block" style="font-size: 1.05rem;">
+                        <i class="fas fa-lock"></i> Assinar Agora (Ir para o Pagamento)
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- RODAPÉ -->
+    <footer class="footer">
+        <div class="container footer-bottom">
+            <p>&copy; 2026 Barber SaaS. Plataforma de Gestão Multi-Tenant para Barbearias.</p>
+        </div>
+    </footer>
+
+    <!-- MODAL DE CHECKOUT / GATEWAY DE PAGAMENTO (SIMULAÇÃO PROFISSIONAL) -->
+    <div id="modalCheckout" class="modal">
+        <div class="modal-content" style="max-width: 460px;">
+            <span class="close-modal" onclick="fecharModalCheckout()">&times;</span>
+            <div class="modal-header">
+                <i class="fas fa-shield-alt modal-icon"></i>
+                <h3>Checkout Seguro</h3>
+                <p style="font-size: 0.88rem; color: var(--text-muted);">Simulação de Gateway (Stripe / Mercado Pago / Asaas)</p>
+            </div>
+
+            <div class="summary-box">
+                <p><strong>Produto:</strong> Assinatura Mensal Barber SaaS Pro</p>
+                <p><strong>Total:</strong> R$ 59,90/mês</p>
+            </div>
+
+            <div class="form-group">
+                <label><i class="fas fa-wallet"></i> Forma de Pagamento</label>
+                <select id="metodoPagamento" style="width: 100%; padding: 10px 14px; background: var(--bg-input); color: var(--text-main); border: 1px solid var(--border-color); border-radius: var(--radius); outline: none;">
+                    <option value="pix">Pix (Aprovação Instantânea)</option>
+                    <option value="cartao">Cartão de Crédito</option>
+                </select>
+            </div>
+
+            <button type="button" id="btnConfirmarPagamento" onclick="processarPagamentoSimulado()" class="btn btn-primary btn-block">
+                <i class="fas fa-check-circle"></i> Confirmar Pagamento & Ir ao Cadastro
+            </button>
+        </div>
+    </div>
+
+    <script>
+        function abrirModalCheckout() {
+            document.getElementById('modalCheckout').classList.add('active');
+        }
+
+        function fecharModalCheckout() {
+            document.getElementById('modalCheckout').classList.remove('active');
+        }
+
+        function processarPagamentoSimulado() {
+            const btn = document.getElementById('btnConfirmarPagamento');
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Aprovando pagamento no Gateway...';
+            btn.disabled = true;
+
+            setTimeout(() => {
+                // Pagamento aprovado com sucesso! Redireciona para o onboarding pós-pagamento
+                window.location.href = 'cadastro_barbearia.html';
+            }, 1200);
+        }
+    </script>
+
+</body>
+</html>

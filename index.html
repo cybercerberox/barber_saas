@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Barbearia Vintage - Agendamento Online</title>
+    
+    <!-- Google Fonts: Oswald & Poppins -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- CSS Dark / Vintage -->
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Supabase SDK e Configuração -->
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <script src="supabase-config.js"></script>
+    <script src="script.js" defer></script>
+</head>
+<body>
+
+    <!-- BANNER DE AVISO (EXIBIDO CASO NÃO HAJA SALÃO NA URL) -->
+    <div id="tenantWarning" class="tenant-warning-banner" style="display: none;">
+        <i class="fas fa-exclamation-triangle"></i>
+        <span id="tenantWarningText">Nenhuma barbearia foi identificada na URL. Use o formato: <code>index.html?salao=nome-do-slug</code></span>
+    </div>
+
+    <!-- BARRA SUPERIOR -->
+    <div class="top-bar">
+        <div class="container top-bar-content">
+            <div class="top-info">
+                <span><i class="far fa-clock"></i> Seg - Sáb: 09:00 - 20:00 | Dom: Fechado</span>
+                <span id="topBarLocal"><i class="fas fa-location-dot"></i> Atendimento com hora marcada</span>
+            </div>
+            <div class="status-badge" id="live-status">
+                <span class="status-dot"></span>
+                <span id="status-text">Verificando horário...</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- CABEÇALHO / NAVEGAÇÃO -->
+    <header class="header">
+        <div class="container navbar">
+            <a href="#" class="logo" id="brandLogo">
+                <i class="fas fa-scissors"></i> <span id="brandName">BARBER SAAS</span>
+            </a>
+            
+            <button class="menu-toggle" id="menu-toggle" aria-label="Abrir Menu">
+                <i class="fas fa-bars"></i>
+            </button>
+
+            <nav class="nav-menu" id="nav-menu">
+                <ul>
+                    <li><a href="#home" class="nav-link active">Início</a></li>
+                    <li><a href="#servicos" class="nav-link">Serviços</a></li>
+                    <li><a href="#agendamento" class="nav-link">Agendamento</a></li>
+                    <li><a href="#contato" class="nav-link">Contato</a></li>
+                    <li><a href="login.html" class="nav-link" style="color: var(--accent-gold);"><i class="fas fa-user-shield"></i> Painel do Barbeiro</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- HERO SECTION -->
+    <section id="home" class="hero">
+        <div class="container hero-content">
+            <span class="sub-title" id="heroSubtitle">ESTILO, TRADIÇÃO E EXCELÊNCIA</span>
+            <h1 id="heroTitle">SEU VISUAL EM BOAS MÃOS</h1>
+            <p id="heroDescription">Agende online com facilidade e garanta seu atendimento sem filas nem espera.</p>
+            <div class="hero-btns">
+                <a href="#agendamento" class="btn btn-primary"><i class="far fa-calendar-alt"></i> Agendar Horário</a>
+                <a href="#servicos" class="btn btn-outline">Ver Serviços e Preços</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- SEÇÃO DE SERVIÇOS (DINÂMICOS DO SALÃO) -->
+    <section id="servicos" class="section servicos-section">
+        <div class="container">
+            <div class="section-title">
+                <h2>NOSSOS SERVIÇOS</h2>
+                <p>Confira a tabela exclusiva de serviços e valores oferecidos pelo nosso salão</p>
+            </div>
+
+            <!-- Grade de serviços renderizada dinamicamente pelo script.js -->
+            <div class="services-grid" id="servicesGrid">
+                <div class="empty-state" style="grid-column: 1 / -1;">
+                    <i class="fas fa-spinner fa-spin"></i>
+                    <h3>Carregando serviços...</h3>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SEÇÃO DE AGENDAMENTO -->
+    <section id="agendamento" class="section booking-section">
+        <div class="container">
+            <div class="booking-wrapper">
+                <div class="booking-info">
+                    <h2>RESERVE SEU HORÁRIO</h2>
+                    <p>Preencha os campos ao lado para confirmar o seu agendamento em poucos segundos.</p>
+
+                    <div class="info-list">
+                        <div class="info-item">
+                            <i class="fas fa-check-circle"></i>
+                            <div>
+                                <h4>Sem filas de espera</h4>
+                                <p>Chegue no horário reservado e seja atendido sem demora.</p>
+                            </div>
+                        </div>
+                        <div class="info-item">
+                            <i class="fas fa-clock"></i>
+                            <div>
+                                <h4>Horários flexíveis</h4>
+                                <p>Atendimento de segunda a sábado das 09h às 20h.</p>
+                            </div>
+                        </div>
+                        <div class="info-item">
+                            <i class="fas fa-mobile-screen-button"></i>
+                            <div>
+                                <h4>Praticidade e rapidez</h4>
+                                <p>Confirmação imediata integrada ao painel do barbeiro.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="booking-form-container">
+                    <!-- Mensagem dinâmica de feedback do form -->
+                    <div id="formAlert" style="display: none;"></div>
+
+                    <form id="appointmentForm" class="booking-form" onsubmit="processarAgendamento(event)">
+                        <div class="form-group">
+                            <label for="nome"><i class="far fa-user"></i> Seu Nome Completo</label>
+                            <input type="text" id="nome" required placeholder="Ex: Lucas Ferreira">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="telefone"><i class="fab fa-whatsapp"></i> WhatsApp / Telefone</label>
+                            <input type="tel" id="telefone" required placeholder="(11) 98765-4321">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="servico"><i class="fas fa-concierge-bell"></i> Selecione o Serviço</label>
+                            <select id="servico" required>
+                                <option value="">Carregando serviços disponíveis...</option>
+                            </select>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="data"><i class="far fa-calendar-alt"></i> Data</label>
+                                <input type="date" id="data" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="hora"><i class="far fa-clock"></i> Horário</label>
+                                <select id="hora" required>
+                                    <option value="">Selecione...</option>
+                                    <option value="09:00">09:00</option>
+                                    <option value="10:00">10:00</option>
+                                    <option value="11:00">11:00</option>
+                                    <option value="12:00">12:00</option>
+                                    <option value="14:00">14:00</option>
+                                    <option value="15:00">15:00</option>
+                                    <option value="16:00">16:00</option>
+                                    <option value="17:00">17:00</option>
+                                    <option value="18:00">18:00</option>
+                                    <option value="19:00">19:00</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <button type="submit" id="btnSubmitAppointment" class="btn btn-primary btn-block">
+                            <i class="far fa-calendar-check"></i> Confirmar Agendamento
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- RODAPÉ -->
+    <footer id="contato" class="footer">
+        <div class="container footer-content">
+            <div class="footer-col">
+                <h3 id="footerBrandName">BARBER SAAS</h3>
+                <p id="footerBrandDesc">Sua barbearia de confiança com agendamento online inteligente e sem complicação.</p>
+                <div class="social-links">
+                    <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                    <a href="#" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
+                    <a href="#" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+                </div>
+            </div>
+
+            <div class="footer-col">
+                <h4>HORÁRIOS DE ATENDIMENTO</h4>
+                <p>Segunda a Sexta: 09:00 às 20:00</p>
+                <p>Sábado: 09:00 às 20:00</p>
+                <p>Domingo e Feriados: Fechado</p>
+            </div>
+
+            <div class="footer-col">
+                <h4>ACESSO AO SISTEMA</h4>
+                <p>Você é dono de barbearia ou barbeiro?</p>
+                <p style="margin-top: 10px;">
+                    <a href="login.html" class="btn btn-outline btn-sm">
+                        <i class="fas fa-lock"></i> Acessar Painel
+                    </a>
+                </p>
+                <p style="margin-top: 10px;">
+                    <a href="landing_comercial.html" class="auth-link highlight">
+                        <i class="fas fa-sparkles"></i> Conheça os planos para o seu salão
+                    </a>
+                </p>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; <span id="currentYear">2026</span> <span id="copyrightBrand">Barber SaaS</span>. Todos os direitos reservados.</p>
+        </div>
+    </footer>
+
+    <!-- MODAL DE CONFIRMAÇÃO DE AGENDAMENTO -->
+    <div id="bookingModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="fecharModal()">&times;</span>
+            <div class="modal-header">
+                <i class="far fa-check-circle modal-icon"></i>
+                <h3>Agendamento Confirmado!</h3>
+            </div>
+            <div class="modal-body">
+                <p style="text-align: center; color: var(--text-muted); margin-bottom: 12px;">Seu horário foi reservado com sucesso no sistema.</p>
+                <div class="summary-box" id="modalSummary"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary btn-block" onclick="fecharModalLimparForm()">
+                    <i class="fas fa-check"></i> Fechar e Concluir
+                </button>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

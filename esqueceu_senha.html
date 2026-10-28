@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recuperar Senha - Barber SaaS</title>
+    
+    <!-- Google Fonts: Oswald & Poppins -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- CSS Dark / Vintage -->
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Supabase SDK e Configuração -->
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <script src="supabase-config.js"></script>
+</head>
+<body>
+
+    <div class="auth-wrapper">
+        <div class="auth-card">
+            
+            <div class="auth-header">
+                <a href="index.html" class="logo">
+                    <i class="fas fa-scissors"></i> BARBER SAAS
+                </a>
+                <p>Recuperação de Acesso</p>
+            </div>
+
+            <div class="booking-form-container">
+                <div style="text-align: center; margin-bottom: 22px;">
+                    <h2 style="font-family: var(--font-heading); font-size: 1.8rem; letter-spacing: 1px;">ESQUECEU A SENHA?</h2>
+                    <p style="font-size: 0.88rem; color: var(--text-muted);">Digite o e-mail cadastrado na sua conta para enviarmos o link de recuperação de senha.</p>
+                </div>
+
+                <div id="resetAlert" style="display: none;"></div>
+
+                <form id="forgotForm" class="booking-form" onsubmit="enviarRecuperacao(event)">
+                    <div class="form-group">
+                        <label for="email"><i class="far fa-envelope"></i> E-mail Cadastrado</label>
+                        <input type="email" id="email" required placeholder="seu@email.com" autocomplete="email">
+                        <span class="form-helper">Você receberá um link seguro para cadastrar uma nova senha.</span>
+                    </div>
+
+                    <button type="submit" id="btnForgotSubmit" class="btn btn-primary btn-block">
+                        <i class="fas fa-paper-plane"></i> Enviar Link de Recuperação
+                    </button>
+                </form>
+
+                <div class="auth-footer-links">
+                    <p style="color: var(--text-muted);">Lembrou da senha?</p>
+                    <a href="login.html" class="auth-link highlight">
+                        <i class="fas fa-arrow-left"></i> Voltar para o Login
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        async function enviarRecuperacao(e) {
+            e.preventDefault();
+
+            const alertBox = document.getElementById('resetAlert');
+            alertBox.style.display = 'none';
+
+            const email = document.getElementById('email').value.trim();
+            const btnSubmit = document.getElementById('btnForgotSubmit');
+
+            if (!email) {
+                mostrarAlerta('Por favor, informe seu e-mail.', 'warning');
+                return;
+            }
+
+            const textoOriginal = btnSubmit.innerHTML;
+            btnSubmit.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Enviando link...';
+            btnSubmit.disabled = true;
+
+            try {
+                if (!supabaseClient) {
+                    throw new Error('Supabase não inicializado.');
+                }
+
+                // Determina URL completa da página de atualização de senha
+                const redirectUrl = window.location.origin + window.location.pathname.replace('esqueceu_senha.html', 'atualizar_senha.html');
+
+                const { data, error } = await supabaseClient.auth.resetPasswordForEmail(email, {
+                    redirectTo: redirectUrl
+                });
+
+                if (error) throw error;
+
+                mostrarAlerta(`Link de recuperação enviado com sucesso para <strong>${email}</strong>! Verifique sua caixa de entrada e a pasta de spam.`, 'success');
+                document.getElementById('forgotForm').reset();
+
+            } catch (err) {
+                console.error('Erro na recuperação:', err);
+                mostrarAlerta('Não foi possível enviar o e-mail de recuperação. Verifique o endereço digitado ou tente novamente mais tarde.', 'danger');
+            } finally {
+                btnSubmit.innerHTML = textoOriginal;
+                btnSubmit.disabled = false;
+            }
+        }
+
+        function mostrarAlerta(msg, tipo) {
+            const alertBox = document.getElementById('resetAlert');
+            alertBox.className = `alert alert-${tipo}`;
+            alertBox.innerHTML = `<i class="fas fa-info-circle"></i> <span>${msg}</span>`;
+            alertBox.style.display = 'flex';
+        }
+    </script>
+
+</body>
+</html>

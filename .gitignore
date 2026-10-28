@@ -1,0 +1,35 @@
+# ==========================================================================
+# GITIGNORE - BARBER SAAS
+# ==========================================================================
+
+# Arquivos e Pastas do Sistema Operacional (Windows e macOS)
+Thumbs.db
+ehthumbs.db
+[Dd]esktop.ini
+$RECYCLE.BIN/
+.DS_Store
+._*
+
+# Configurações de Editores e IDEs (VS Code, WebStorm, etc.)
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+*.swp
+*.swo
+
+# Arquivos de Variáveis de Ambiente e Segredos Locais
+.env
+.env.*
+!.env.example
+
+# Logs e Arquivos Temporários
+*.log
+npm-debug.log*
+yarn-debug.log*
+
+# Dependências (caso venha a rodar bibliotecas Node/NPM)
+node_modules/
+
+# Cache local de Deploy da Vercel
+.vercel/
