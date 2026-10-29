@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel do Barbeiro - Barber SaaS</title>
+    
+    <!-- Google Fonts: Oswald & Poppins -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- CSS Dark / Vintage -->
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Supabase SDK e Configuração -->
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <script src="supabase-config.js"></script>
+    <script src="painel.js" defer></script>
+</head>
+<body>
+
+    <!-- TOPBAR / NAVBAR DO PAINEL SAAS -->
+    <header class="dashboard-nav">
+        <div class="container dashboard-nav-content">
+            <div class="dashboard-brand">
+                <a href="painel.html" class="logo" style="font-size: 1.4rem;">
+                    <i class="fas fa-scissors"></i> BARBER SAAS
+                </a>
+                <span class="tenant-badge" id="tenantBadge">
+                    <i class="fas fa-store"></i> <span id="barbeariaNomeTop">Carregando...</span>
+                </span>
+            </div>
+
+            <div class="dashboard-actions">
+                <a id="linkPaginaPublica" href="#" target="_blank" class="btn btn-outline-gold btn-sm" style="display: none;">
+                    <i class="fas fa-external-link-alt"></i> Minha Página Pública
+                </a>
+                
+                <span class="user-email-tag" id="userEmailTag">
+                    <i class="far fa-user"></i> <span id="userEmailSpan">carregando...</span>
+                </span>
+
+                <button onclick="fazerLogout()" class="btn btn-outline-danger btn-sm" title="Sair do Sistema">
+                    <i class="fas fa-sign-out-alt"></i> Sair
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- NAVEGAÇÃO DE ABAS DO PAINEL (AGENDAMENTOS vs MEUS SERVIÇOS) -->
+    <div style="background-color: var(--bg-surface); border-bottom: 1px solid var(--border-color); padding: 10px 0;">
+        <div class="container" style="display: flex; gap: 15px; align-items: center;">
+            <button id="tabBtnAgendamentos" class="filter-btn active" onclick="alternarAba('agendamentos')" style="font-size: 0.95rem; padding: 8px 20px;">
+                <i class="far fa-calendar-alt"></i> Agendamentos do Salão
+            </button>
+            <button id="tabBtnServicos" class="filter-btn" onclick="alternarAba('servicos')" style="font-size: 0.95rem; padding: 8px 20px;">
+                <i class="fas fa-cut"></i> Gerenciar Meus Serviços & Preços
+            </button>
+        </div>
+    </div>
+
+    <!-- CONTEÚDO PRINCIPAL DO DASHBOARD -->
+    <main class="container" style="padding: 30px 0 60px;">
+        
+        <!-- ALERTA DO PAINEL -->
+        <div id="painelAlert" style="display: none;"></div>
+
+        <!-- ============================================================== -->
+        <!-- ABA 1: AGENDAMENTOS -->
+        <!-- ============================================================== -->
+        <section id="secaoAgendamentos">
+            <div class="dashboard-hero">
+                <div>
+                    <h1 id="barbeariaTitle">PAINEL ADMINISTRATIVO</h1>
+                    <p style="color: var(--text-muted); font-size: 0.95rem;">Controle e visualize os agendamentos da sua barbearia em tempo real.</p>
+                </div>
+                <div>
+                    <button onclick="recarregarAgendamentos()" class="btn btn-outline btn-sm">
+                        <i class="fas fa-sync-alt" id="refreshIcon"></i> Atualizar Dados
+                    </button>
+                </div>
+            </div>
+
+            <!-- CARDS DE MÉTRICAS RÁPIDAS -->
+            <div class="dashboard-stats">
+                <div class="stat-card">
+                    <div class="stat-card-info">
+                        <h4>Total</h4>
+                        <div class="stat-number" id="statTotal">0</div>
+                    </div>
+                    <div class="stat-card-icon"><i class="fas fa-calendar-check"></i></div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-card-info">
+                        <h4>Pendentes</h4>
+                        <div class="stat-number" id="statPendentes" style="color: #FBBF24;">0</div>
+                    </div>
+                    <div class="stat-card-icon"><i class="fas fa-hourglass-half"></i></div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-card-info">
+                        <h4>Concluídos</h4>
+                        <div class="stat-number" id="statConcluidos" style="color: #34D399;">0</div>
+                    </div>
+                    <div class="stat-card-icon"><i class="fas fa-check-double"></i></div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-card-info">
+                        <h4>Cancelados</h4>
+                        <div class="stat-number" id="statCancelados" style="color: #F87171;">0</div>
+                    </div>
+                    <div class="stat-card-icon"><i class="fas fa-times-circle"></i></div>
+                </div>
+            </div>
+
+            <!-- BARRA DE FILTROS -->
+            <div class="dashboard-filter-bar">
+                <div class="filter-group">
+                    <span style="font-size: 0.85rem; color: var(--text-muted); font-weight: 600;">Status:</span>
+                    <button class="filter-btn active" data-filter="todos" onclick="filtrarStatus('todos', this)">Todos</button>
+                    <button class="filter-btn" data-filter="pendente" onclick="filtrarStatus('pendente', this)">Pendentes</button>
+                    <button class="filter-btn" data-filter="concluido" onclick="filtrarStatus('concluido', this)">Concluídos</button>
+                    <button class="filter-btn" data-filter="cancelado" onclick="filtrarStatus('cancelado', this)">Cancelados</button>
+                </div>
+
+                <div class="filter-group">
+                    <label for="filtroData" style="font-size: 0.85rem; color: var(--text-muted); font-weight: 600;">Filtrar por data:</label>
+                    <input type="date" id="filtroData" onchange="filtrarData(this.value)" style="padding: 6px 10px; background-color: var(--bg-input); border: 1px solid var(--border-color); color: var(--text-main); border-radius: var(--radius); font-size: 0.85rem; outline: none;">
+                    <button onclick="limparFiltroData()" class="btn btn-outline btn-sm" title="Limpar data">Limpar</button>
+                </div>
+            </div>
+
+            <!-- GRID DE AGENDAMENTOS -->
+            <div id="listaAgendamentos" class="services-grid" style="grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));">
+                <div class="empty-state">
+                    <i class="fas fa-spinner fa-spin"></i>
+                    <h3>Carregando agendamentos...</h3>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================================== -->
+        <!-- ABA 2: GERENCIAR MEUS SERVIÇOS & PREÇOS -->
+        <!-- ============================================================== -->
+        <section id="secaoServicos" style="display: none;">
+            <div class="dashboard-hero">
+                <div>
+                    <h1>CATÁLOGO DE SERVIÇOS DO SALÃO</h1>
+                    <p style="color: var(--text-muted); font-size: 0.95rem;">Adicione, edite preços ou remova os serviços que aparecem na sua página pública de agendamento.</p>
+                </div>
+                <div>
+                    <button onclick="abrirModalNovoServico()" class="btn btn-primary btn-sm">
+                        <i class="fas fa-plus"></i> Adicionar Novo Serviço
+                    </button>
+                </div>
+            </div>
+
+            <!-- GRID DE SERVIÇOS CADASTRADOS DO BARBEIRO -->
+            <div id="listaServicosPainel" class="services-grid">
+                <div class="empty-state">
+                    <i class="fas fa-spinner fa-spin"></i>
+                    <h3>Carregando seus serviços...</h3>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- MODAL: ADICIONAR / EDITAR SERVIÇO -->
+    <div id="modalServico" class="modal">
+        <div class="modal-content" style="max-width: 440px;">
+            <span class="close-modal" onclick="fecharModalServico()">&times;</span>
+            <div class="modal-header">
+                <i class="fas fa-cut modal-icon"></i>
+                <h3 id="modalServicoTitulo">Novo Serviço</h3>
+            </div>
+            
+            <form id="formServico" onsubmit="salvarServico(event)">
+                <input type="hidden" id="servicoId">
+
+                <div class="form-group">
+                    <label for="servicoNome"><i class="fas fa-tag"></i> Nome do Serviço</label>
+                    <input type="text" id="servicoNome" required placeholder="Ex: Corte Degradê + Navalha">
+                </div>
+
+                <div class="form-group">
+                    <label for="servicoPreco"><i class="fas fa-dollar-sign"></i> Preço (R$)</label>
+                    <input type="number" id="servicoPreco" step="0.50" min="0" required placeholder="Ex: 45.00">
+                </div>
+
+                <div class="form-group">
+                    <label for="servicoDescricao"><i class="fas fa-align-left"></i> Descrição / Detalhes</label>
+                    <textarea id="servicoDescricao" rows="3" style="width: 100%; padding: 10px 14px; border: 1px solid var(--border-color); border-radius: var(--radius); background-color: var(--bg-input); color: var(--text-main); font-family: var(--font-body); outline: none;" placeholder="Ex: Corte na tesoura com finalização e lavagem especial."></textarea>
+                </div>
+
+                <button type="submit" id="btnSalvarServico" class="btn btn-primary btn-block">
+                    <i class="fas fa-save"></i> Salvar Serviço
+                </button>
+            </form>
+        </div>
+    </div>
+
+</body>
+</html>
